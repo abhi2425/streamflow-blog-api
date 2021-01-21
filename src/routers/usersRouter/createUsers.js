@@ -3,11 +3,13 @@ const router = express.Router()
 const UsersCollection = require('../../models/usersCollection')
 const auth = require('../../middlewares/auth')
 
-router.post('/user/signup', async ({ body }, res) => {
-   const user = new UsersCollection(body)
+router.post('/signup', async ({ body }, res) => {
    try {
+      body.userName = body.userName.replace(/\s/g, '-')
+      const user = new UsersCollection(body)
       await user.save()
       const token = await user.getAuthToken()
+
       res.status(201).send({
          user,
          token,
@@ -16,7 +18,7 @@ router.post('/user/signup', async ({ body }, res) => {
       res.status(500).send(error.message)
    }
 })
-router.post('/user/login', async ({ body }, res) => {
+router.post('/login', async ({ body }, res) => {
    try {
       const user = await UsersCollection.findByCredential(body.email, body.password)
       const token = await user.getAuthToken()
@@ -41,12 +43,12 @@ router.post('/user/logout', auth, async ({ user, token }, res) => {
       })
    }
 })
-router.post('/user/logoutAll', auth, (req, res) => {
+router.post('/user/logoutAll', auth, ({ user }, res) => {
    try {
-      req.user.tokens = []
-      req.user.save()
+      user.tokens = []
+      user.save()
       res.status(201).send({
-         message: 'Logged Out !! From All Devices',
+         message: user.name + ' Logged Out From All Devices!!',
       })
    } catch (error) {
       res.status(500).send({
@@ -54,5 +56,4 @@ router.post('/user/logoutAll', auth, (req, res) => {
       })
    }
 })
-
 module.exports = router

@@ -21,26 +21,24 @@ router.patch('/users/me', auth, async ({ body, user }, res) => {
       'followers',
    ]
    const isValidUpdate = userUpdates.every((updates) => allowedUpdates.includes(updates))
-   if (!isValidUpdate) {
-      const invalidProperty = []
-      userUpdates.forEach((key) => {
-         if (!allowedUpdates.includes(key)) {
-            invalidProperty.push(key)
-         }
-      })
-      return res.status(404).send(`Error:- Invalid Property-${invalidProperty} is Not Updated `)
-   }
    try {
+      if (!isValidUpdate) {
+         const invalidProperty = []
+         userUpdates.forEach((key) => {
+            if (!allowedUpdates.includes(key)) {
+               invalidProperty.push(key)
+            }
+         })
+         return res.status(404).send(`Error:- Invalid Property- ${invalidProperty} is Not Updated `)
+      }
+
       userUpdates.forEach((update) => {
          user[update] = body[update]
       })
       await user.save()
-      if (!user) {
-         return res.status(404).send({
-            message: 'Not Updated!!',
-         })
-      }
-      res.status(200).send(user)
+      res.status(200).send({
+         message: `${user.name}'s account updated successfully!!`,
+      })
    } catch (error) {
       res.status(500).send(error.message)
    }

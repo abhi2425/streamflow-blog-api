@@ -40,6 +40,15 @@ userSchema.methods.toJSON = function () {
    delete userObject.password
    delete userObject.tokens
    delete userObject.avatar
+   delete userObject.followers
+   return userObject
+}
+userSchema.methods.filterWhileSending = function () {
+   const userObject = this.toObject()
+   delete userObject.password
+   delete userObject.tokens
+   delete userObject.avatar
+   delete userObject.followers
    return userObject
 }
 userSchema.pre('save', async function (next) {

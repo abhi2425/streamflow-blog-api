@@ -12,9 +12,18 @@ const postSchema = new mongoose.Schema(
          type: String,
          required: true,
       },
-      viewCount: Number,
-      upVote: Number,
-      downVote: Number,
+      viewCount: {
+         type: Number,
+         default: 0,
+      },
+      upVote: {
+         type: Number,
+         default: 0,
+      },
+      downVote: {
+         type: Number,
+         default: 0,
+      },
       comments: [
          {
             owner: {
@@ -35,7 +44,7 @@ const postSchema = new mongoose.Schema(
          },
       ],
       postOwner: {
-         type: mongoose.Schema.Types.ObjectId,
+         type: String,
          required: true,
          ref: 'UsersCollection',
       },
