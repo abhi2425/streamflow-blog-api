@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema(
             }
          },
       },
+      gender: {
+         type: String,
+         // required: true,
+      },
       status: {
          type: String,
          lowercase: true,
@@ -70,12 +74,13 @@ const userSchema = new mongoose.Schema(
          {
             token: {
                type: String,
-               //required: true,
+               required: true,
             },
          },
       ],
       avatar: {
-         type: Buffer,
+         image: String,
+         publicId: String,
       },
       interests: {
          type: [String],
@@ -98,19 +103,13 @@ const userSchema = new mongoose.Schema(
       followers: [
          {
             followerId: {
+               _id: false,
                type: mongoose.Schema.Types.ObjectId,
+               required: true,
                ref: 'UserCollection',
             },
          },
       ],
-      // followings: [
-      //    {
-      //       followingId: {
-      //          type: mongoose.Schema.Types.ObjectId,
-      //          ref: 'UsersCollection',
-      //       },
-      //    },
-      // ],
    },
    {
       timestamps: true,

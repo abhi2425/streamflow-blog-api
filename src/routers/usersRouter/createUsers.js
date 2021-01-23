@@ -1,8 +1,43 @@
 const express = require('express')
+const sharp = require('sharp')
 const router = express.Router()
+
 const UsersCollection = require('../../models/usersCollection')
 const auth = require('../../middlewares/auth')
+const uploadImage = require('../../utils/multerUpload')
+const uploadToCloudinaryByStreams = require('../../utils/uploadToCloudinary')
+const mongoose = require('mongoose')
+router.get('/test', auth, async ({ user }, res) => {
+   try {
+      const usersThisDudeIsFollowing = await UsersCollection.find(
+         {
+            'followers.followerId': mongoose.Types.ObjectId(user._id),
+         },
+         {
+            followers: '$followers.followerId',
+            _id: 0,
+         },
+      )
+      console.log(usersThisDudeIsFollowing)
+      res.send(usersThisDudeIsFollowing)
+      const userFound = []
+      //   const isFollower = userFound.followers.find(
+      //      (_) => JSON.stringify(_.followerId) === JSON.stringify(user._id),
+      //   )
 
+      //   if (isFollower) {
+      //      userFound.followers = userFound.followers.filter(
+      //         (_) => JSON.stringify(_.followerId) !== JSON.stringify(user._id),
+      //      )
+      //      await userFound.save()
+      //      return res.status(202).send({ message: `you unfollowed ${userName}` })
+      //   }
+   } catch (error) {
+      res.send(error.message)
+   }
+})
+
+// create a user and add a token for surfing around
 router.post('/signup', async ({ body }, res) => {
    try {
       body.userName = body.userName.replace(/\s/g, '-')
@@ -18,6 +53,7 @@ router.post('/signup', async ({ body }, res) => {
       res.status(500).send(error.message)
    }
 })
+//login user and give them a token to use restricted routes
 router.post('/login', async ({ body }, res) => {
    try {
       const user = await UsersCollection.findByCredential(body.email, body.password)
@@ -30,7 +66,9 @@ router.post('/login', async ({ body }, res) => {
       res.status(404).send(error.message)
    }
 })
-router.post('/user/logout', auth, async ({ user, token }, res) => {
+
+// logout from current device
+router.post('/profile/user/logout', auth, async ({ user, token }, res) => {
    try {
       user.tokens = user.tokens.filter((tokenObj) => tokenObj.token !== token)
       await user.save()
@@ -43,11 +81,13 @@ router.post('/user/logout', auth, async ({ user, token }, res) => {
       })
    }
 })
-router.post('/user/logoutAll', auth, ({ user }, res) => {
+
+// logout user from all the devices
+router.post('/profile/user/logoutAll', auth, ({ user }, res) => {
    try {
       user.tokens = []
       user.save()
-      res.status(201).send({
+      res.status(200).send({
          message: user.name + ' Logged Out From All Devices!!',
       })
    } catch (error) {
@@ -56,4 +96,39 @@ router.post('/user/logoutAll', auth, ({ user }, res) => {
       })
    }
 })
+
+// upload or update profile picture
+router.post(
+   '/profile/me/avatar',
+   auth,
+   uploadImage.single('avatar'),
+   async ({ file, user }, res) => {
+      const buffer = await sharp(file.buffer)
+         .png()
+         .resize({
+            width: 400,
+            height: 400,
+         })
+         .toBuffer()
+
+      const result = await uploadToCloudinaryByStreams(buffer)
+      user.avatar = {
+         image: result.secure_url,
+         publicId: result.public_id,
+      }
+      await user.save()
+
+      res.status(200).send({
+         message: 'image uploaded !!',
+         url: result.secure_url,
+         publicId: result.public_id,
+      })
+   },
+   (error, _, res, next) => {
+      res.status(400).send({
+         error: error.message,
+      })
+   },
+)
+
 module.exports = router

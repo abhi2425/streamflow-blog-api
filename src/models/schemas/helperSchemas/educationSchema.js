@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const educationSchema = new mongoose.Schema({
+   _id: false,
    institution: {
       type: String,
       required: true,

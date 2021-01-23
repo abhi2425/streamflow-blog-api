@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const addressSchema = new mongoose.Schema({
+   _id: false,
    country: {
       type: String,
       required: true,

@@ -7,6 +7,7 @@ const postSchema = new mongoose.Schema(
          required: true,
          trim: true,
          lowercase: true,
+         unique: true,
       },
       body: {
          type: String,
@@ -26,20 +27,36 @@ const postSchema = new mongoose.Schema(
       },
       comments: [
          {
+            _id: false,
             owner: {
-               type: mongoose.Schema.Types.ObjectId,
+               type: String,
                required: true,
             },
             description: String,
-            upVote: Number,
-            downVote: Number,
-            date: Date,
+            upVote: {
+               type: Number,
+               default: 0,
+            },
+            downVote: {
+               type: Number,
+               default: 0,
+            },
+            date: {
+               type: Date,
+               default: Date.now(),
+            },
          },
       ],
       blogImages: [
          {
+            _id: false,
             image: {
-               type: Buffer,
+               type: String,
+               required: true,
+            },
+            publicId: {
+               type: String,
+               required: true,
             },
          },
       ],

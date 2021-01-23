@@ -24,10 +24,10 @@ router.get('/posts/titles', async (_, res) => {
 })
 
 // get titles of all post of particular user
-router.get('/posts/titles/:userName', async ({ params }, res) => {
+router.get('/:userName/posts/titles', async ({ params }, res) => {
    try {
       const titles = await PostsCollection.aggregate([
-         { $match: { postOwner: params.userName } },
+         { $match: { postOwner: params.userName.toLowerCase() } },
          { $project: { title: 1, _id: 0 } },
       ])
       if (titles.length === 0) throw new Error()
@@ -36,15 +36,31 @@ router.get('/posts/titles/:userName', async ({ params }, res) => {
       res.status(404).send({ error: 'user not found!!' })
    }
 })
-
-// get particular post of particular user
-router.get('/post/:userName/:postTitle', async ({ params }, res) => {
+// get all post of one user
+router.get('/:userName/posts', async ({ params }, res) => {
    try {
       const post = await PostsCollection.aggregate([
          {
             $match: {
-               postOwner: params.userName,
-               title: params.postTitle,
+               postOwner: params.userName.toLowerCase(),
+            },
+         },
+      ])
+      if (post.length === 0) throw new Error('no post found for user')
+      return res.status(200).send(post)
+   } catch (error) {
+      res.status(404).send({ error: error.message })
+   }
+})
+
+// get particular post of particular user
+router.get('/:userName/post/:postTitle', async ({ params }, res) => {
+   try {
+      const post = await PostsCollection.aggregate([
+         {
+            $match: {
+               postOwner: params.userName.toLowerCase(),
+               title: params.postTitle.toLowerCase(),
             },
          },
       ])
@@ -55,20 +71,23 @@ router.get('/post/:userName/:postTitle', async ({ params }, res) => {
       res.status(404).send({ error: 'either user or post not found!!' })
    }
 })
-// get all post of one user
-router.get('/posts/:userName', async ({ params }, res) => {
+
+//get comments on a post of a user
+router.get('/:userName/post/:postTitle/comments', async ({ params }, res) => {
    try {
-      const post = await PostsCollection.aggregate([
+      const comments = await PostsCollection.aggregate([
          {
             $match: {
-               postOwner: params.userName,
+               postOwner: params.userName.toLowerCase(),
+               title: params.postTitle.toLowerCase(),
             },
          },
+         { $project: { _id: 0, comments: 1 } },
       ])
-      if (post.length === 0) throw new Error()
-      return res.status(200).send(post)
+      if (comments.length === 0) throw new Error('Either user or post not found!!')
+      res.status(200).send(comments)
    } catch (error) {
-      res.status(404).send({ error: 'user not found!!' })
+      res.status(404).send(error.message)
    }
 })
 
