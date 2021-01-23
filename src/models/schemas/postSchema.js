@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+const commentsSchema = require('./helperSchemas/commentsSchema')
+const blogImageSchema = require('./helperSchemas/blogImageSchema')
 const postSchema = new mongoose.Schema(
    {
       title: {
@@ -25,41 +27,8 @@ const postSchema = new mongoose.Schema(
          type: Number,
          default: 0,
       },
-      comments: [
-         {
-            _id: false,
-            owner: {
-               type: String,
-               required: true,
-            },
-            description: String,
-            upVote: {
-               type: Number,
-               default: 0,
-            },
-            downVote: {
-               type: Number,
-               default: 0,
-            },
-            date: {
-               type: Date,
-               default: Date.now(),
-            },
-         },
-      ],
-      blogImages: [
-         {
-            _id: false,
-            image: {
-               type: String,
-               required: true,
-            },
-            publicId: {
-               type: String,
-               required: true,
-            },
-         },
-      ],
+      comments: [commentsSchema],
+      blogImages: [blogImageSchema],
       postOwner: {
          type: String,
          required: true,
@@ -70,4 +39,5 @@ const postSchema = new mongoose.Schema(
       timestamps: true,
    },
 )
+
 module.exports = postSchema

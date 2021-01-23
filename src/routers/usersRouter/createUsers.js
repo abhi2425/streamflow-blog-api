@@ -6,36 +6,6 @@ const UsersCollection = require('../../models/usersCollection')
 const auth = require('../../middlewares/auth')
 const uploadImage = require('../../utils/multerUpload')
 const uploadToCloudinaryByStreams = require('../../utils/uploadToCloudinary')
-const mongoose = require('mongoose')
-router.get('/test', auth, async ({ user }, res) => {
-   try {
-      const usersThisDudeIsFollowing = await UsersCollection.find(
-         {
-            'followers.followerId': mongoose.Types.ObjectId(user._id),
-         },
-         {
-            followers: '$followers.followerId',
-            _id: 0,
-         },
-      )
-      console.log(usersThisDudeIsFollowing)
-      res.send(usersThisDudeIsFollowing)
-      const userFound = []
-      //   const isFollower = userFound.followers.find(
-      //      (_) => JSON.stringify(_.followerId) === JSON.stringify(user._id),
-      //   )
-
-      //   if (isFollower) {
-      //      userFound.followers = userFound.followers.filter(
-      //         (_) => JSON.stringify(_.followerId) !== JSON.stringify(user._id),
-      //      )
-      //      await userFound.save()
-      //      return res.status(202).send({ message: `you unfollowed ${userName}` })
-      //   }
-   } catch (error) {
-      res.send(error.message)
-   }
-})
 
 // create a user and add a token for surfing around
 router.post('/signup', async ({ body }, res) => {
@@ -119,7 +89,7 @@ router.post(
       await user.save()
 
       res.status(200).send({
-         message: 'image uploaded !!',
+         message: 'image uploaded!',
          url: result.secure_url,
          publicId: result.public_id,
       })

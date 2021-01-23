@@ -53,8 +53,8 @@ router.get('/user/:userName/following', async ({ params }, res) => {
 })
 
 const getUserByFilter = async (filter, userName) => {
-   if (filter === 'password') throw new Error(`Error-: Don't try to be smart😁`)
-   if (filter === 'tokens') throw new Error(`Error-: Don't try to be smart😁`)
+   if (filter === 'password') throw new Error(`don't try to be smart😁`)
+   if (filter === 'tokens') throw new Error(`don't try to be smart😁`)
 
    if (filter === 'followers') {
       const idOfFollowers = await UsersCollection.aggregate([
@@ -89,7 +89,7 @@ const getUserByFilter = async (filter, userName) => {
          },
       },
    ])
-   if (Object.keys(userField[0]).length === 0) throw new Error('incorrect query!!')
+   if (Object.keys(userField[0]).length === 0) throw new Error('incorrect query!')
    return userField
 }
 // get any field of a user   //----> can use it to find followers list a user
@@ -98,7 +98,7 @@ router.get('/user/:userName/:filter', async ({ params }, res) => {
       const userField = await getUserByFilter(params.filter, params.userName.toLowerCase())
       return res.status(200).send(userField)
    } catch (error) {
-      res.status(404).send(error.message)
+      res.status(404).send({ error: error.message })
    }
 })
 

@@ -11,7 +11,7 @@ router.delete('/profile/user/me', auth, async ({ user }, res) => {
          .status(202)
          .send({ message: `${removedUser.name}'s account deleted permanently!!` })
    } catch (error) {
-      res.status(500).send(error.message)
+      res.status(500).send({ error: error.message })
    }
 })
 
@@ -23,11 +23,9 @@ router.delete('/profile/me/delete/:publicId', auth, async ({ params, user }, res
          user.avatar = null
          await user.save()
          return res.status(202).send(result)
-      } else {
-         throw new Error('profile image not found!')
-      }
+      } else throw new Error('profile image not found!')
    } catch (error) {
-      res.status(404).send(error.message)
+      res.status(404).send({ error: error.message })
    }
 })
 module.exports = router

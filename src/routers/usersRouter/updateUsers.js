@@ -29,7 +29,9 @@ router.patch('/profile/user/me', auth, async ({ body, user }, res) => {
                invalidProperty.push(key)
             }
          })
-         return res.status(404).send(`Error:- Invalid Property- ${invalidProperty} is Not Updated `)
+         return res
+            .status(404)
+            .send({ error: `Error:- invalid property- ${invalidProperty} is not updated ` })
       }
 
       userUpdates.forEach((update) => {
@@ -37,7 +39,7 @@ router.patch('/profile/user/me', auth, async ({ body, user }, res) => {
       })
       await user.save()
       res.status(202).send({
-         message: `${user.name}'s account updated successfully!!`,
+         message: `${user.name}'s account updated successfully!`,
       })
    } catch (error) {
       res.status(500).send(error.message)
@@ -49,7 +51,7 @@ router.patch('/profile/user/:userName/followOrUnfollow', auth, async ({ params, 
    try {
       const userName = params.userName.toLowerCase()
       const userFound = await UsersCollection.findOne({ userName }, { followers: 1 })
-      if (!userFound) throw new Error('user not found!!')
+      if (!userFound) throw new Error('user not found!')
 
       const isFollower = userFound.followers.find(
          (_) => JSON.stringify(_.followerId) === JSON.stringify(user._id),
@@ -67,9 +69,9 @@ router.patch('/profile/user/:userName/followOrUnfollow', auth, async ({ params, 
          userFound.followers = [...userFound.followers, { followerId: user._id }]
          await userFound.save()
          return res.status(202).send({ message: 'you followed ' + userName })
-      } else throw new Error('you can not follow yourself')
+      } else throw new Error('you can not follow yourself!')
    } catch (error) {
-      res.status(500).send(error.message)
+      res.status(400).send({ error: error.message })
    }
 })
 

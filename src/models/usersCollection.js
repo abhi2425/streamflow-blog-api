@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const bcryptjs = require('bcryptjs')
+
 const userSchema = require('./schemas/userSchema')
 const PostsCollection = require('./postCollection')
 const deleteImageFromCloudinary = require('../utils/deleteFromCloudinary')
@@ -46,7 +47,7 @@ userSchema.statics.removeFromFollowersList = async (id) => {
 
    return result
 }
-
+// generating auth token for user
 userSchema.methods.getAuthToken = async function () {
    const token = jwt.sign(
       {
@@ -63,15 +64,16 @@ userSchema.methods.getAuthToken = async function () {
    await this.save()
    return token
 }
+// deleting large data before sending to client --> this method is called implicitly by res.send()
 userSchema.methods.toJSON = function () {
    const userObject = this.toObject()
    delete userObject.password
    delete userObject.tokens
-   delete userObject.avatar
-   //delete userObject.followers
+   delete userObject.followers
    return userObject
 }
 
+// hashing password before saving to db
 userSchema.pre('save', async function (next) {
    const user = this
    if (user.isModified('password')) {
@@ -79,6 +81,7 @@ userSchema.pre('save', async function (next) {
    }
    next()
 })
+
 // removing profile pic and all posts of user whose account is going to be removed
 userSchema.pre('remove', async function (next) {
    const user = this

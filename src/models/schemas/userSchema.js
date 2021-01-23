@@ -1,8 +1,10 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
+
 const educationSchema = require('./helperSchemas/educationSchema')
 const workSchema = require('./helperSchemas/workSchema')
 const addressSchema = require('./helperSchemas/addressSchema')
+const followersSchema = require('./helperSchemas/followerSchema')
 const userSchema = new mongoose.Schema(
    {
       name: {
@@ -34,7 +36,6 @@ const userSchema = new mongoose.Schema(
       },
       gender: {
          type: String,
-         // required: true,
       },
       status: {
          type: String,
@@ -100,16 +101,7 @@ const userSchema = new mongoose.Schema(
       address: {
          type: addressSchema,
       },
-      followers: [
-         {
-            followerId: {
-               _id: false,
-               type: mongoose.Schema.Types.ObjectId,
-               required: true,
-               ref: 'UserCollection',
-            },
-         },
-      ],
+      followers: [followersSchema],
    },
    {
       timestamps: true,

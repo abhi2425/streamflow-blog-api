@@ -18,7 +18,7 @@ router.delete('/profile/post/delete/:title', auth, async ({ user, params }, res)
          .status(200)
          .send({ message: `${user.name}'s '${deletedPost.title} post' deleted successfully!!` })
    } catch (error) {
-      res.status(404).send('Error-: ' + error.message)
+      res.status(404).send({ error: error.message })
    }
 })
 
@@ -29,7 +29,7 @@ router.delete('/profile/posts/deleteAll', auth, async ({ user }, res) => {
       if (posts.deletedCount === 0) throw new Error(`you don't have any post to delete!`)
       return res.status(200).send({ message: `${user.name}'s all posts deleted successfully!!` })
    } catch (error) {
-      res.status(404).send('Error-: ' + error.message)
+      res.status(404).send({ error: error.message })
    }
 })
 module.exports = router

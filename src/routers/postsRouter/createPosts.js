@@ -18,7 +18,7 @@ router.post('/profile/post/create', auth, async ({ user, body }, res) => {
       await post.save()
       res.status(201).send(post)
    } catch (error) {
-      res.status(500).send(error.message)
+      res.status(500).send({ error: error.message })
    }
 })
 
@@ -33,7 +33,7 @@ router.post(
             postOwner: user.userName,
             title: params.postTitle,
          })
-         if (!post) throw new Error('post not found!!')
+         if (!post) throw new Error('post not found!')
 
          const images = []
          for (const file of files) {
@@ -50,7 +50,7 @@ router.post(
          }
 
          res.status(200).send({
-            message: 'Images uploaded!!',
+            message: 'images uploaded!!',
             images,
          })
       } catch (error) {

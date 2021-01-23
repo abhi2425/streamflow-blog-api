@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+
 const postSchema = require('./schemas/postSchema')
 const deleteImageFromCloudinary = require('../utils/deleteFromCloudinary')
 
