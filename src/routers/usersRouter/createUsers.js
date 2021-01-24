@@ -5,6 +5,7 @@ const router = express.Router()
 const UsersCollection = require('../../models/usersCollection')
 const auth = require('../../middlewares/auth')
 const uploadImage = require('../../utils/multerUpload')
+const sendEmailOnSigningIn = require('../../utils/sendEmail')
 const uploadToCloudinaryByStreams = require('../../utils/uploadToCloudinary')
 
 // create a user and add a token for surfing around
@@ -14,13 +15,16 @@ router.post('/signup', async ({ body }, res) => {
       const user = new UsersCollection(body)
       await user.save()
       const token = await user.getAuthToken()
-
+      await sendEmailOnSigningIn(
+         body.email,
+         `Hii, ${body.name},Thanks for joining us please let me know how I can help you to enhance your experience here.`,
+      )
       res.status(201).send({
          user,
          token,
       })
    } catch (error) {
-      res.status(500).send(error.message)
+      res.status(500).send({ error: error.message })
    }
 })
 //login user and give them a token to use restricted routes
