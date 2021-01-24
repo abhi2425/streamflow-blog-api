@@ -61,6 +61,8 @@ const getUserByFilter = async (filter, userName) => {
          { $match: { userName } },
          { $project: { list: `$${filter}`, _id: 0 } },
       ])
+      console.log()
+      if (idOfFollowers.length === 0) throw new Error('user not found!')
       const followersId = [...idOfFollowers[0].list]
       const followersList = []
       for (const _ of followersId) {

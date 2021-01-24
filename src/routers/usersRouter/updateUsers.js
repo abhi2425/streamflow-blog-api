@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const auth = require('../../middlewares/auth')
 const UsersCollection = require('../../models/usersCollection')
+const mongoose = require('mongoose')
 
 //update any fields of user
 router.patch('/profile/user/me', auth, async ({ body, user }, res) => {
@@ -79,12 +80,32 @@ router.patch('/profile/user/:userName/followOrUnfollow', auth, async ({ params, 
 router.patch('/profile/user/remove/:userName', auth, async ({ params, user }, res) => {
    try {
       const data = await UsersCollection.findOne(
-         { userName: params.userName },
+         { userName: params.userName.toLowerCase() },
          { _id: 1, userName: 1 },
       )
       if (!data) throw new Error('user not found!')
 
-      const result = await UsersCollection.removeFromFollowersList(data._id)
+      const result = await UsersCollection.updateMany(
+         {
+            _id: mongoose.Types.ObjectId(user._id),
+            'followers.followerId': mongoose.Types.ObjectId(data._id),
+         },
+         [
+            {
+               $set: {
+                  followers: {
+                     $filter: {
+                        input: '$followers',
+                        as: 'follower',
+                        cond: {
+                           $ne: ['$$follower.followerId', data._id],
+                        },
+                     },
+                  },
+               },
+            },
+         ],
+      )
       if (result.nModified === 0) throw new Error(`${data.userName} is not your follower!`)
 
       res.status(202).send({ message: `${data.userName} is removed from your follower's list` })
