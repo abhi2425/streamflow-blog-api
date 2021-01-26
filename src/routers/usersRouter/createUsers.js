@@ -77,26 +77,30 @@ router.post(
    auth,
    uploadImage.single('avatar'),
    async ({ file, user }, res) => {
-      const buffer = await sharp(file.buffer)
-         .png()
-         .resize({
-            width: 400,
-            height: 400,
+      try {
+         const buffer = await sharp(file.buffer)
+            .png()
+            .resize({
+               width: 400,
+               height: 400,
+            })
+            .toBuffer()
+
+         const result = await uploadToCloudinaryByStreams(buffer)
+         user.avatar = {
+            image: result.secure_url,
+            publicId: result.public_id,
+         }
+         await user.save()
+
+         res.status(200).send({
+            message: 'image uploaded!',
+            url: result.secure_url,
+            publicId: result.public_id,
          })
-         .toBuffer()
-
-      const result = await uploadToCloudinaryByStreams(buffer)
-      user.avatar = {
-         image: result.secure_url,
-         publicId: result.public_id,
+      } catch (error) {
+         res.status(500).send({ error: error.message })
       }
-      await user.save()
-
-      res.status(200).send({
-         message: 'image uploaded!',
-         url: result.secure_url,
-         publicId: result.public_id,
-      })
    },
    (error, _, res, next) => {
       res.status(400).send({
