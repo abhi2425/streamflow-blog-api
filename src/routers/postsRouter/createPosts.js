@@ -60,7 +60,7 @@ router.post(
       }
    },
    (error, _, res, next) => {
-      res.status(400).send({
+      res.status(500).send({
          error: error.message,
       })
    },
