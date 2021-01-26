@@ -85,7 +85,7 @@ router.patch('/profile/user/remove/:userName', auth, async ({ params, user }, re
       )
       if (!data) throw new Error('user not found!')
 
-      const result = await UsersCollection.updateMany(
+      const result = await UsersCollection.updateOne(
          {
             _id: mongoose.Types.ObjectId(user._id),
             'followers.followerId': mongoose.Types.ObjectId(data._id),

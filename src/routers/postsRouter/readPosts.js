@@ -1,6 +1,59 @@
 const express = require('express')
 const router = express.Router()
 const PostsCollection = require('../../models/postCollection')
+const UsersCollection = require('../../models/usersCollection')
+
+//search for any thing
+router.get('/search', async ({ query }, res) => {
+   try {
+      const postsResult = await PostsCollection.aggregate([
+         {
+            $match: {
+               $text: {
+                  $search: query.search,
+                  $caseSensitive: false,
+                  $diacriticSensitive: false,
+               },
+            },
+         },
+         { $project: { title: 1, body: 1, blogImages: 1, _id: 0 } },
+      ])
+      const usersResult = await UsersCollection.aggregate([
+         {
+            $match: {
+               $text: {
+                  $search: query.search,
+                  $caseSensitive: false,
+                  $diacriticSensitive: false,
+               },
+            },
+         },
+         {
+            $project: {
+               name: 1,
+               userName: 1,
+               email: 1,
+               interest: {
+                  $filter: {
+                     input: '$interests',
+                     as: 'interest',
+                     cond: {
+                        $eq: ['$$interest', query.search],
+                     },
+                  },
+               },
+               avatar: 1,
+               _id: 0,
+            },
+         },
+      ])
+      if (!postsResult.length && !usersResult.length)
+         throw new Error('nothing found for search term-:' + query.search)
+      res.status(200).send([...postsResult, ...usersResult])
+   } catch (error) {
+      res.status(404).send({ error: error.message })
+   }
+})
 
 // get all posts of every user
 router.get('/posts', async (_, res) => {

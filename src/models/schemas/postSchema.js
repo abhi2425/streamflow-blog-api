@@ -27,6 +27,7 @@ const postSchema = new mongoose.Schema(
          type: Number,
          default: 0,
       },
+      tags: [String],
       comments: [commentsSchema],
       blogImages: [blogImageSchema],
       postOwner: {
@@ -39,5 +40,6 @@ const postSchema = new mongoose.Schema(
       timestamps: true,
    },
 )
+postSchema.index({ title: 'text', body: 'text', tags: 'text' }, { weight: { title: 3, body: 5 } })
 
 module.exports = postSchema
