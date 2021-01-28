@@ -20,9 +20,11 @@ const userSchema = new mongoose.Schema(
          trim: true,
          unique: true,
       },
-      buildType: {
+      birthday: {
          type: String,
          required: true,
+         lowercase: true,
+         trim: true,
       },
       age: {
          type: Number,

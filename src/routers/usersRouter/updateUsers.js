@@ -14,7 +14,6 @@ router.patch('/profile/user/me', auth, async ({ body, user }, res) => {
       'age',
       'status',
       'quotes',
-      'password',
       'interests',
       'socialMedia',
       'eduQualification',
@@ -41,6 +40,19 @@ router.patch('/profile/user/me', auth, async ({ body, user }, res) => {
       await user.save()
       res.status(202).send({
          message: `${user.name}'s account updated successfully!`,
+      })
+   } catch (error) {
+      res.status(500).send(error.message)
+   }
+})
+// separate route for updating password
+router.patch('/profile/user/me/password', auth, async ({ body, user }, res) => {
+   try {
+      if (user.password !== body.oldPassword) throw new Error('incorrect password!')
+      user.password = body.newPassword
+      await user.save()
+      res.status(200).send({
+         message: 'password updated successfully!',
       })
    } catch (error) {
       res.status(500).send(error.message)
