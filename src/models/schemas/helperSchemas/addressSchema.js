@@ -8,6 +8,12 @@ const addressSchema = new mongoose.Schema({
       lowercase: true,
       trim: true,
    },
+   state: {
+      type: String,
+      required: true,
+      lowercase: true,
+      trim: true,
+   },
    city: {
       type: String,
       required: true,
