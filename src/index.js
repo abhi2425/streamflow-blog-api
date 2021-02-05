@@ -31,7 +31,7 @@ app.use(createPosts)
 app.use(readPosts)
 app.use(updatePosts)
 app.use(deletePosts)
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5000
 
 app.listen(port, () => {
    console.log('Server is up at ', port)
