@@ -23,7 +23,7 @@ const educationSchema = new mongoose.Schema({
       required: true,
    },
    yearOfCompletion: {
-      type: Number,
+      type: String,
       required: true,
    },
 })
