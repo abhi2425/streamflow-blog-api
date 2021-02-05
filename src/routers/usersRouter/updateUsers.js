@@ -10,8 +10,8 @@ router.patch('/profile/user/me', auth, async ({ body, user }, res) => {
    const allowedUpdates = [
       'name',
       'userName',
-      'buildType',
-      'age',
+      'birthday',
+      'email',
       'status',
       'quotes',
       'interests',
