@@ -3,6 +3,7 @@ const router = express.Router()
 const auth = require('../../middlewares/auth')
 const UsersCollection = require('../../models/usersCollection')
 const mongoose = require('mongoose')
+const bcryptjs = require('bcryptjs')
 
 //update any fields of user
 router.patch('/profile/user/me', auth, async ({ body, user }, res) => {
@@ -42,20 +43,22 @@ router.patch('/profile/user/me', auth, async ({ body, user }, res) => {
          message: `${user.name}'s account updated successfully!`,
       })
    } catch (error) {
-      res.status(500).send(error.message)
+      res.status(500).send({ error: error.message })
    }
 })
 // separate route for updating password
 router.patch('/profile/user/me/password', auth, async ({ body, user }, res) => {
    try {
-      if (user.password !== body.oldPassword) throw new Error('incorrect password!')
+      const isMatch = bcryptjs.compare(body.oldPassword, user.password)
+      if (!isMatch) throw new Error('Unable To Login')
+
       user.password = body.newPassword
       await user.save()
       res.status(200).send({
          message: 'password updated successfully!',
       })
    } catch (error) {
-      res.status(500).send(error.message)
+      res.status(500).send({ error: error.message })
    }
 })
 
