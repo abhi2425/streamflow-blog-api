@@ -91,7 +91,7 @@ const getUserByFilter = async (filter, userName) => {
          },
       },
    ])
-   if (Object.keys(userField[0]).length === 0) throw new Error('incorrect query!')
+   // if (Object.keys(userField[0]).length === 0) throw new Error('incorrect query!')
    return userField
 }
 // get any field of a user   //----> can use it to find followers list a user
