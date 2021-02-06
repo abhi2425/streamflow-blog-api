@@ -34,7 +34,7 @@ router.post(
             title: params.postTitle,
          })
          if (!post) throw new Error('post not found!')
-
+         console.log(files)
          const images = []
          for (const file of files) {
             const result = await uploadToCloudinaryByStreams(file.buffer)
