@@ -8,18 +8,22 @@ const deleteImageFromCloudinary = require('../utils/deleteFromCloudinary')
 
 // login check for user
 userSchema.statics.findByCredential = async (email, password) => {
-   const user = await UsersCollection.findOne({
-      email,
-   })
+   try {
+      const user = await UsersCollection.findOne({
+         email,
+      })
 
-   if (!user) {
-      throw new Error('E-Mail Not Found!!!')
+      if (!user) {
+         throw new Error('E-Mail Not Found!!!')
+      }
+      const isMatch = await bcryptjs.compare(password, user.password)
+      if (!isMatch) {
+         throw new Error('Unable To Login')
+      }
+      return user
+   } catch (error) {
+      resizeBy.send({ error: error.message })
    }
-   const isMatch = bcryptjs.compare(password, user.password)
-   if (!isMatch) {
-      throw new Error('Unable To Login')
-   }
-   return user
 }
 
 // removes user from followers list

@@ -30,14 +30,17 @@ router.post('/signup', async ({ body }, res) => {
 //login user and give them a token to use restricted routes
 router.post('/login', async ({ body }, res) => {
    try {
-      const user = await UsersCollection.findByCredential(body.email, body.password)
-      const token = await user.getAuthToken()
-      res.status(200).send({
-         user,
-         token,
-      })
+      if (body.password && body.email) {
+         const user = await UsersCollection.findByCredential(body.email, body.password)
+         const token = await user.getAuthToken()
+         return res.status(200).send({
+            user,
+            token,
+         })
+      }
+      throw new Error('Credentials missing!')
    } catch (error) {
-      res.status(404).send(error.message)
+      res.status(404).send({ error: error.message })
    }
 })
 

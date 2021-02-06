@@ -49,9 +49,8 @@ router.patch('/profile/user/me', auth, async ({ body, user }, res) => {
 // separate route for updating password
 router.patch('/profile/user/me/password', auth, async ({ body, user }, res) => {
    try {
-      const isMatch = bcryptjs.compare(body.oldPassword, user.password)
-      if (!isMatch) throw new Error('Unable To Login')
-
+      const isMatch = await bcryptjs.compare(body.oldPassword, user.password)
+      if (!isMatch) throw new Error('wrong Password!')
       user.password = body.newPassword
       await user.save()
       res.status(200).send({

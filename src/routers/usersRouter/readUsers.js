@@ -9,7 +9,7 @@ router.get('/users', async (_, res) => {
       const users = await UsersCollection.find({})
       res.status(200).send(users)
    } catch (error) {
-      res.status(500).send(error.message)
+      res.status(500).send({ error: error.message })
    }
 })
 // get any user by userName
@@ -22,7 +22,7 @@ router.get('/user/:userName', async ({ params }, res) => {
       if (!user) throw new Error('User not Found!!')
       return res.status(200).send(user)
    } catch (error) {
-      res.status(404).send(error.message)
+      res.status(404).send({ error: error.message })
    }
 })
 
@@ -48,7 +48,7 @@ router.get('/user/:userName/following', async ({ params }, res) => {
       ])
       res.status(200).send(following)
    } catch (error) {
-      res.status(404).send(error.message)
+      res.status(404).send({ error: error.message })
    }
 })
 
