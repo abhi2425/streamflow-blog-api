@@ -23,8 +23,8 @@ router.delete('/profile/user/me', auth, async ({ user }, res) => {
 //delete any pic either of your post or profile
 router.delete('/profile/me/delete/:publicId', auth, async ({ params, user }, res) => {
    try {
-      const result = await deleteImageFromCloudinary(params.publicId)
-      if (result.result !== 'not found') {
+      const result = await deleteImageFromCloudinary(params?.publicId)
+      if (result?.result !== 'not found') {
          user.avatar = null
          await user.save()
          return res.status(202).send(result)
