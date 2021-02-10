@@ -7,6 +7,7 @@ const auth = require('../../middlewares/auth')
 const uploadImage = require('../../utils/multerUpload')
 const sendEmailOnSigningIn = require('../../utils/sendEmail')
 const uploadToCloudinaryByStreams = require('../../utils/uploadToCloudinary')
+const deleteImageFromCloudinary = require('../../utils/deleteFromCloudinary')
 
 // create a user and add a token for surfing around
 router.post('/signup', async ({ body }, res) => {
@@ -81,6 +82,9 @@ router.post(
    uploadImage.single('avatar'),
    async ({ file, user }, res) => {
       try {
+         if (user.avatar.publicId) {
+            await deleteImageFromCloudinary(user.avatar.publicId)
+         }
          const buffer = await sharp(file.buffer)
             .png()
             .resize({

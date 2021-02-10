@@ -92,16 +92,17 @@ router.get('/:userName/posts/titles', async ({ params }, res) => {
 // get all post of one user
 router.get('/:userName/posts', async ({ params }, res) => {
    try {
-      // const post = await PostsCollection.aggregate([
-      //    {
-      //       $match: {
-      //          postOwner: params.userName.toLowerCase(),
-      //       },
-      //    },
-      // ])
-      const post = await PostsCollection.find({ postOwner: params.userName.toLowerCase() })
-      if (post.length === 0) throw new Error('no post found for user')
-      return res.status(200).send(post)
+      const posts = await PostsCollection.aggregate([
+         {
+            $match: {
+               postOwner: params.userName.toLowerCase(),
+            },
+         },
+      ])
+      //Another way ...Doesn't matter😁
+      // const post = await PostsCollection.find({ postOwner: params.userName.toLowerCase() })
+      if (posts.length === 0) throw new Error('no post found for user')
+      return res.status(200).send(posts)
    } catch (error) {
       res.status(404).send({ error: error.message })
    }
