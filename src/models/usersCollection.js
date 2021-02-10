@@ -94,6 +94,17 @@ userSchema.pre('remove', async function (next) {
       if (result.result === 'not found') throw new Error('Something went wrong!!')
    }
    await UsersCollection.removeFromFollowersList(user._id)
+   const posts = await PostsCollection.find({ postOwner: user.userName })
+   for (let post of posts) {
+      const { blogImages } = post
+      if (blogImages.length !== 0) {
+         for (const blogImage of blogImages) {
+            const result = await deleteImageFromCloudinary(blogImage.publicId)
+            if (result.result === 'not found') throw new Error('no images in this post')
+         }
+      }
+   }
+
    await PostsCollection.deleteMany({
       postOwner: user.userName,
    })
