@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
-const postSchema = require('./schemas/postSchema')
-const deleteImageFromCloudinary = require('../utils/deleteFromCloudinary')
+const postSchema = require('../schemas/postSchema')
+const deleteImageFromCloudinary = require('../services/cloudinary/deleteFromCloudinary')
 
 // removing blogImages from cloudinary on removing a particular post by authorized user
 postSchema.pre('remove', async function (next) {

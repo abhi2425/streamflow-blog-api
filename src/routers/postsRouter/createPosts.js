@@ -3,7 +3,7 @@ const router = express.Router()
 
 const auth = require('../../middlewares/auth')
 const postImageUpload = require('../../utils/multerUpload')
-const uploadToCloudinaryByStreams = require('../../utils/uploadToCloudinary')
+const uploadToCloudinaryByStreams = require('../../services/cloudinary/uploadToCloudinary')
 const PostsCollection = require('../../models/postCollection')
 
 //create post only if u r authorized user

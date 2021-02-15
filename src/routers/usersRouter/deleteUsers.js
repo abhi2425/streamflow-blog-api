@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const auth = require('../../middlewares/auth')
-const deleteImageFromCloudinary = require('../../utils/deleteFromCloudinary')
-const sendEmailWhenUserLeaves = require('../../utils/sendEmail')
+const deleteImageFromCloudinary = require('../../services/cloudinary/deleteFromCloudinary')
+const sendEmailWhenUserLeaves = require('../../services/nodemailer')
 
 // delete a user along with it's profile pic and it's link to all post or followers
 router.delete('/profile/user/me', auth, async ({ user }, res) => {

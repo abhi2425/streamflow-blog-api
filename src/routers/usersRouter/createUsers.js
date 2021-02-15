@@ -5,9 +5,9 @@ const router = express.Router()
 const UsersCollection = require('../../models/usersCollection')
 const auth = require('../../middlewares/auth')
 const uploadImage = require('../../utils/multerUpload')
-const sendEmailOnSigningIn = require('../../utils/sendEmail')
-const uploadToCloudinaryByStreams = require('../../utils/uploadToCloudinary')
-const deleteImageFromCloudinary = require('../../utils/deleteFromCloudinary')
+const sendEmailOnSigningIn = require('../../services/nodemailer')
+const uploadToCloudinaryByStreams = require('../../services/cloudinary/uploadToCloudinary')
+const deleteImageFromCloudinary = require('../../services/cloudinary/deleteFromCloudinary')
 
 // create a user and add a token for surfing around
 router.post('/signup', async ({ body }, res) => {

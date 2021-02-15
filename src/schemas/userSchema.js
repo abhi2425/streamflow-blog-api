@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema(
       },
       birthday: {
          type: String,
+
          lowercase: true,
          trim: true,
       },

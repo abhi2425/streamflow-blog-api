@@ -1,4 +1,4 @@
-const cloudinary = require('./cloudinaryConfig')
+const cloudinary = require('./deleteFromCloudinary')
 
 const deleteImageFromCloudinary = (publicId) => {
    return new Promise((resolve, reject) => {

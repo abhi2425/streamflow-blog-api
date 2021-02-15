@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const bcryptjs = require('bcryptjs')
 
-const userSchema = require('./schemas/userSchema')
+const userSchema = require('../schemas/userSchema')
 const PostsCollection = require('./postCollection')
-const deleteImageFromCloudinary = require('../utils/deleteFromCloudinary')
+const deleteImageFromCloudinary = require('../services/cloudinary/deleteFromCloudinary')
 
 // login check for user
 userSchema.statics.findByCredential = async (email, password) => {

@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const auth = require('../../middlewares/auth')
 const PostsCollection = require('../../models/postCollection')
-const deleteImageFromCloudinary = require('../../utils/deleteFromCloudinary')
 
 //delete a post along with all images in it using title only if u r owner of post
 router.delete('/profile/post/delete/:title', auth, async ({ user, params }, res) => {
