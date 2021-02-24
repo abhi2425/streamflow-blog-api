@@ -40,8 +40,8 @@ router.get('/user/:userName/following', async ({ params }, res) => {
             $project: {
                userName: 1,
                name: 1,
+               avatar: 1,
                status: 1,
-               currentlyWorking: 1,
                _id: 0,
             },
          },
@@ -73,7 +73,7 @@ const getUserByFilter = async (filter, userName) => {
                   userName: 1,
                   name: 1,
                   status: 1,
-                  currentlyWorking: 1,
+                  avatar: 1,
                   _id: 0,
                },
             },
