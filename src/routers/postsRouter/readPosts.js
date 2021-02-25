@@ -101,10 +101,9 @@ router.get('/:userName/posts', async ({ params }, res) => {
       ])
       //Another way ...Doesn't matter😁
       // const post = await PostsCollection.find({ postOwner: params.userName.toLowerCase() })
-      if (posts.length === 0) throw new Error('no post found for user')
       return res.status(200).send(posts)
    } catch (error) {
-      res.status(404).send({ error: error.message })
+      res.status(500).send({ error: error.message })
    }
 })
 
