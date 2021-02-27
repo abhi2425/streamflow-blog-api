@@ -7,14 +7,8 @@ const commentsSchema = mongoose.Schema({
       required: true,
    },
    description: String,
-   upVote: {
-      type: Number,
-      default: 0,
-   },
-   downVote: {
-      type: Number,
-      default: 0,
-   },
+   upVote: [String],
+   downVote: [String],
    date: {
       type: Date,
       default: Date.now(),

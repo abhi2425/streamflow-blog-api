@@ -19,14 +19,8 @@ const postSchema = new mongoose.Schema(
          type: Number,
          default: 0,
       },
-      upVote: {
-         type: Number,
-         default: 0,
-      },
-      downVote: {
-         type: Number,
-         default: 0,
-      },
+      upVote: [String],
+      downVote: [String],
       tags: [String],
       comments: [commentsSchema],
       blogImages: [blogImageSchema],
