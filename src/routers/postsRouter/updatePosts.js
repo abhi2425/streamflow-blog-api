@@ -39,7 +39,7 @@ router.patch('/profile/post/update/:title', auth, async ({ body, params, user },
    }
 })
 // route for upVotes and downVotes any authorized person can access
-router.patch('profile/post/votes/:title', auth, async (req, res) => {
+router.patch('/profile/post/votes/:title', auth, async (req, res) => {
    try {
       const userUpdates = Object.keys(body)
       const allowedUpdates = ['upVote', 'downVote']
