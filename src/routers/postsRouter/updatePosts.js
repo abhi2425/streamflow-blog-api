@@ -39,7 +39,7 @@ router.patch('/profile/post/update/:title', auth, async ({ body, params, user },
    }
 })
 // route for upVotes and downVotes any authorized person can access
-router.patch('/profile/post/votes/:title', auth, async (req, res) => {
+router.patch('/profile/post/votes/:title', auth, async ({ body, params }, res) => {
    try {
       const userUpdates = Object.keys(body)
       const allowedUpdates = ['upVote', 'downVote']
@@ -48,7 +48,7 @@ router.patch('/profile/post/votes/:title', auth, async (req, res) => {
          res.status(400).send({ error: error.message })
       }
       const post = await PostsCollection.findOne({
-         title: req.params.title.toLowerCase(),
+         title: params.title.toLowerCase(),
       })
       if (!post) throw new Error('post not found!')
       userUpdates.forEach((update) => (post[update] = body[update]))
