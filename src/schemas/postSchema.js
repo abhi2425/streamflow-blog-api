@@ -15,10 +15,6 @@ const postSchema = new mongoose.Schema(
          type: String,
          required: true,
       },
-      viewCount: {
-         type: Number,
-         default: 0,
-      },
       upVote: [String],
       downVote: [String],
       tags: [String],

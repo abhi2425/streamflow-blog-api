@@ -3,19 +3,15 @@ const router = express.Router()
 const auth = require('../../middlewares/auth')
 const PostsCollection = require('../../models/postCollection')
 
-//update any field of a post---> only if you r owner of post
+//update required field of a post---> only if you r owner of post
 router.patch('/profile/post/update/:title', auth, async ({ body, params, user }, res) => {
-   const userUpdates = Object.keys(body)
-   const allowedUpdates = ['title', 'body', 'viewCount', 'upVote', 'downVote', 'blogImages']
    try {
+      const userUpdates = Object.keys(body)
+      const allowedUpdates = ['title', 'body', 'blogImages']
       const isValidUpdate = userUpdates.every((updates) => allowedUpdates.includes(updates))
       if (!isValidUpdate) {
-         const invalidProperty = []
-         userUpdates.forEach((key) => {
-            if (!allowedUpdates.includes(key)) invalidProperty.push(key)
-         })
          return res.status(404).send({
-            error: `invalid property-${invalidProperty} is not updated `,
+            error: `invalid property is not updated `,
          })
       }
       const post = await PostsCollection.findOne({
@@ -36,9 +32,26 @@ router.patch('/profile/post/update/:title', auth, async ({ body, params, user },
 
       if (!post) throw new Error('post not found!')
       userUpdates.forEach((update) => (post[update] = body[update]))
-      //   userUpdates.forEach((update) => (post1[0][update] = body[update]))
-      //   console.log(post1)
-      // await post1.save()  --> Not allowed
+      await post.save()
+      res.status(202).send({ message: `${post.title}  updated successfully!!` })
+   } catch (error) {
+      res.status(400).send({ error: error.message })
+   }
+})
+// route for upVotes and downVotes any authorized person can access
+router.patch('profile/post/votes/:title', auth, async (req, res) => {
+   try {
+      const userUpdates = Object.keys(body)
+      const allowedUpdates = ['upVote', 'downVote']
+      const isValidUpdate = userUpdates.every((updates) => allowedUpdates.includes(updates))
+      if (!isValidUpdate) {
+         res.status(400).send({ error: error.message })
+      }
+      const post = await PostsCollection.findOne({
+         title: req.params.title.toLowerCase(),
+      })
+      if (!post) throw new Error('post not found!')
+      userUpdates.forEach((update) => (post[update] = body[update]))
       await post.save()
       res.status(202).send({ message: `${post.title}  updated successfully!!` })
    } catch (error) {
