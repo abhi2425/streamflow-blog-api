@@ -20,7 +20,7 @@ router.delete('/profile/user/me', auth, async ({ user }, res) => {
    }
 })
 
-//delete any pic either of your post or profile
+//delete profile pic
 router.delete('/profile/me/delete/:publicId', auth, async ({ params, user }, res) => {
    try {
       const result = await deleteImageFromCloudinary(params?.publicId)
