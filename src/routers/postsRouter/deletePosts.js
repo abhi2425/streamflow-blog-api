@@ -28,7 +28,7 @@ router.delete(
    async ({ user, params }, res) => {
       try {
          const result = await deleteImageFromCloudinary(params?.publicId)
-         if (result.result === 'not found') throw new Error('Something went wrong!!')
+         // if (result.result === 'not found') throw new Error('Something went wrong!!')
          const postResult = await PostsCollection.updateOne(
             {
                postOwner: user.userName,
@@ -42,7 +42,7 @@ router.delete(
                            input: '$blogImages',
                            as: 'blogImage',
                            cond: {
-                              $ne: ['$blogImage.publicId', params.publicId],
+                              $ne: ['$$blogImage.publicId', params.publicId],
                            },
                         },
                      },
@@ -50,6 +50,7 @@ router.delete(
                },
             ],
          )
+         console.log(postResult, params.title, user.userName)
          if (postResult.nModified === 0) throw new Error('Could not finish the job!')
          res.status(200).send({ message: 'image deleted!' })
       } catch (error) {
