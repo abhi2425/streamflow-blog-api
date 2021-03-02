@@ -23,7 +23,7 @@ router.delete('/profile/post/delete/:title', auth, async ({ user, params }, res)
 })
 //delete post image of particular post
 router.delete(
-   'profile/post/delete/:title/post-image/:publicId',
+   '/profile/post/delete/:title/post-image/:publicId',
    auth,
    async ({ user, params }, res) => {
       try {
