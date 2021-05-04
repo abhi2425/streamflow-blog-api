@@ -84,25 +84,7 @@ router.patch(
       })
       if (!post) throw new Error('post not found!!')
 
-      const avatar = await UsersCollection.aggregate([
-        {
-          $match: {
-            userName: user.userName,
-          },
-        },
-        { $project: { _id: 0, avatar: 1 } },
-      ])
-      post.comments.forEach((comment) => {
-        if (comment.owner === user.userName) {
-          console.log(comment.ownerAvatar, avatar[0].avatar?.image)
-          comment.ownerAvatar = avatar[0].avatar?.image
-          console.log(comment.ownerAvatar, avatar[0].avatar?.image)
-        }
-      })
-      post.comments = [
-        { ...body, owner: user.userName, ownerAvatar: avatar[0].avatar?.image },
-        ...post.comments,
-      ]
+      post.comments = [{ ...body, owner: user.userName }, ...post.comments]
       await post.save()
       res.status(202).send({ message: 'comment posted!', c: post.comments })
     } catch (error) {
