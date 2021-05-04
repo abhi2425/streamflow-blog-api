@@ -8,10 +8,7 @@ const commentsSchema = mongoose.Schema({
 	},
 	description: String,
 	upVote: [String],
-	ownerAvatar: {
-		image: String,
-		publicId: String,
-	},
+	ownerAvatar: String,
 	downVote: [String],
 	date: {
 		type: Date,

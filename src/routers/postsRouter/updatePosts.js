@@ -92,8 +92,9 @@ router.patch(
 				},
 				{ $project: { _id: 0, avatar: 1 } },
 			])
+
 			post.comments = [
-				{ ...body, owner: user.userName, ownerAvatar: avatar[0] },
+				{ ...body, owner: user.userName, ownerAvatar: avatar[0].avatar?.image },
 				...post.comments,
 			]
 			await post.save()
