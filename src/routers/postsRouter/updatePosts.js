@@ -89,7 +89,7 @@ router.patch(
 				{ _id: 0, avatar: 1 }
 			)
 			post.comments = [
-				{ ...body, owner: user.userName, ownerAvatar: avatar?.image },
+				{ ...body, owner: user.userName, ownerAvatar: avatar },
 				...post.comments,
 			]
 			await post.save()
