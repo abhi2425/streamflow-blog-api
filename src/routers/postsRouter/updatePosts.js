@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const auth = require('../../middlewares/auth')
 const PostsCollection = require('../../models/postCollection')
+const UsersCollection = require('../../models/usersCollection')
 
 //update required field of a post---> only if you r owner of post
 router.patch(
@@ -12,7 +13,7 @@ router.patch(
 			const userUpdates = Object.keys(body)
 			const allowedUpdates = ['title', 'body', 'blogImages']
 			const isValidUpdate = userUpdates.every((updates) =>
-				allowedUpdates.includes(updates),
+				allowedUpdates.includes(updates)
 			)
 			if (!isValidUpdate) {
 				return res.status(404).send({
@@ -42,7 +43,7 @@ router.patch(
 		} catch (error) {
 			res.status(400).send({ error: error.message })
 		}
-	},
+	}
 )
 // route for upVotes and downVotes any authorized person can access
 router.patch(
@@ -53,7 +54,7 @@ router.patch(
 			const userUpdates = Object.keys(body)
 			const allowedUpdates = ['upVote', 'downVote']
 			const isValidUpdate = userUpdates.every((updates) =>
-				allowedUpdates.includes(updates),
+				allowedUpdates.includes(updates)
 			)
 			if (!isValidUpdate) {
 				res.status(400).send({ error: error.message })
@@ -68,7 +69,7 @@ router.patch(
 		} catch (error) {
 			res.status(400).send({ error: error.message })
 		}
-	},
+	}
 )
 
 //add or update comments in a post
@@ -82,8 +83,13 @@ router.patch(
 				title: params.postTitle.toLowerCase(),
 			})
 			if (!post) throw new Error('post not found!!')
+
+			const avatar = await UsersCollection.findOne(
+				{ userName: user.userName },
+				{ _id: 0, avatar: 1 }
+			)
 			post.comments = [
-				{ ...body, owner: user.userName, ownerAvatar: user.avatar?.image },
+				{ ...body, owner: user.userName, ownerAvatar: avatar?.image },
 				...post.comments,
 			]
 			await post.save()
@@ -91,7 +97,7 @@ router.patch(
 		} catch (error) {
 			res.status(404).send({ error: error.message })
 		}
-	},
+	}
 )
 
 module.exports = router
