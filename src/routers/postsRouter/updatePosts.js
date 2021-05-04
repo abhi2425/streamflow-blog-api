@@ -84,12 +84,16 @@ router.patch(
 			})
 			if (!post) throw new Error('post not found!!')
 
-			const avatar = await UsersCollection.findOne(
-				{ userName: user.userName },
-				{ _id: 0, avatar: 1 }
-			)
+			const avatar = await UsersCollection.aggregate([
+				{
+					$match: {
+						userName: user.userName,
+					},
+				},
+				{ $project: { _id: 0, avatar: 1 } },
+			])
 			post.comments = [
-				{ ...body, owner: user.userName, ownerAvatar: avatar },
+				{ ...body, owner: user.userName, ownerAvatar: avatar[0] },
 				...post.comments,
 			]
 			await post.save()
