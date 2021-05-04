@@ -82,7 +82,10 @@ router.patch(
 				title: params.postTitle.toLowerCase(),
 			})
 			if (!post) throw new Error('post not found!!')
-			post.comments = [{ ...body, owner: user.userName }, ...post.comments]
+			post.comments = [
+				{ ...body, owner: user.userName, ownerAvatar: user.avatar?.image },
+				...post.comments,
+			]
 			await post.save()
 			res.status(202).send({ message: 'comment posted!' })
 		} catch (error) {
