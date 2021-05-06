@@ -87,14 +87,14 @@ router.patch(
       post.comments.forEach((comment) => {
         if (comment._id?.toString() === body._id) {
           shouldAddComment = false
-          comment.upVote = [...comment.upVote, ...body.upVote]
+          if (body.upVote) comment.upVote = [...comment.upVote, ...body.upVote]
         }
       })
       if (shouldAddComment)
         post.comments = [{ ...body, owner: user.userName }, ...post.comments]
 
       await post.save()
-      res.status(202).send({ message: 'comment posted!', c: post.comments })
+      res.status(202).send({ message: 'comment posted!' })
     } catch (error) {
       res.status(404).send({ error: error.message })
     }
