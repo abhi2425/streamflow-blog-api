@@ -85,7 +85,7 @@ router.patch(
       // adding upVote for existing comments
       let shouldAddComment = true
       post.comments.forEach((comment) => {
-        if (comment._id?.toString() === body._id) {
+        if (comment._id === body._id) {
           shouldAddComment = false
           if (body.upVote) comment.upVote = [...comment.upVote, ...body.upVote]
         }
