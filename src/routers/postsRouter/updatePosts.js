@@ -84,17 +84,25 @@ router.patch(
 
       // adding upVote for existing comments
       let shouldAddComment = true
-      post.comments.forEach((comment) => {
+      post.comments?.forEach((comment) => {
         if (comment._id === body._id) {
           shouldAddComment = false
-          if (body.upVote) comment.upVote = [...comment.upVote, ...body.upVote]
+
+          if (body.upVote) {
+            const findUpVote = comment.upVote?.findIndex(
+              (name) => name === body.upVote[0]
+            )
+            findUpVote >= 0
+              ? comment.upVote?.splice(findUpVote)
+              : comment.upVote?.push(...body.upVote)
+          }
         }
       })
       if (shouldAddComment)
         post.comments = [{ ...body, owner: user.userName }, ...post.comments]
 
       await post.save()
-      res.status(202).send({ message: 'comment posted!' })
+      res.status(202).send({ message: 'ok' })
     } catch (error) {
       res.status(404).send({ error: error.message })
     }
