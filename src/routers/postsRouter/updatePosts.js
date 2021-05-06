@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const auth = require('../../middlewares/auth')
 const PostsCollection = require('../../models/postCollection')
-const UsersCollection = require('../../models/usersCollection')
 
 //update required field of a post---> only if you r owner of post
 router.patch(
@@ -15,11 +14,11 @@ router.patch(
       const isValidUpdate = userUpdates.every((updates) =>
         allowedUpdates.includes(updates)
       )
-      if (!isValidUpdate) {
+      if (!isValidUpdate)
         return res.status(404).send({
           error: `invalid property is not updated `,
         })
-      }
+
       const post = await PostsCollection.findOne({
         title: params.title.toLowerCase(),
         postOwner: user.userName.toLowerCase(),
@@ -56,9 +55,8 @@ router.patch(
       const isValidUpdate = userUpdates.every((updates) =>
         allowedUpdates.includes(updates)
       )
-      if (!isValidUpdate) {
-        res.status(400).send({ error: error.message })
-      }
+      if (!isValidUpdate) res.status(400).send({ error: error.message })
+
       const post = await PostsCollection.findOne({
         title: params.title.toLowerCase(),
       })
@@ -84,7 +82,17 @@ router.patch(
       })
       if (!post) throw new Error('post not found!!')
 
-      post.comments = [{ ...body, owner: user.userName }, ...post.comments]
+      // adding upVote for existing comments
+      let shouldAddComment = true
+      post.comments.forEach((comment) => {
+        if (comment._id?.toString() === body._id) {
+          shouldAddComment = false
+          comment.upVote = [...comment.upVote, ...body.upVote]
+        }
+      })
+      if (shouldAddComment)
+        post.comments = [{ ...body, owner: user.userName }, ...post.comments]
+
       await post.save()
       res.status(202).send({ message: 'comment posted!', c: post.comments })
     } catch (error) {
