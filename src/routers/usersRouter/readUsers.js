@@ -29,7 +29,7 @@ router.get('/user/:userName', async ({ params }, res) => {
 })
 
 // get any user by email
-router.get('/user/:email', async ({ params }, res) => {
+router.get('/email/:email', async ({ params }, res) => {
   try {
     const user = await UsersCollection.findOne(
       {
