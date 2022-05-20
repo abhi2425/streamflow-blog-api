@@ -16,7 +16,7 @@ router.get('/search', async ({ query }, res) => {
           },
         },
       },
-      { $project: { title: 1, body: 1, blogImages: 1, _id: 0 } },
+      { $project: { title: 1, body: 1, blogImages: 1, postOwner: 1, avatar: 1, _id: 0 } },
     ])
     const usersResult = await UsersCollection.aggregate([
       {
@@ -67,9 +67,7 @@ router.get('/posts', async (_, res) => {
 //get titles of all post of every user
 router.get('/posts/titles', async (_, res) => {
   try {
-    const titles = await PostsCollection.aggregate([
-      { $project: { _id: 0, title: 1 } },
-    ])
+    const titles = await PostsCollection.aggregate([{ $project: { _id: 0, title: 1 } }])
     if (titles.length === 0) throw new Error('no posts found')
     return res.status(200).send(titles)
   } catch (error) {
@@ -139,8 +137,7 @@ router.get('/:userName/post/:postTitle/comments', async ({ params }, res) => {
       },
       { $project: { _id: 0, comments: 1 } },
     ])
-    if (comments.length === 0)
-      throw new Error('either user or post not found!!')
+    if (comments.length === 0) throw new Error('either user or post not found!!')
     res.status(200).send(comments)
   } catch (error) {
     res.status(404).send({ error: error.message })
