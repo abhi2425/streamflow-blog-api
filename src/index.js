@@ -33,6 +33,14 @@ app.use(updatePosts)
 app.use(deletePosts)
 const port = process.env.PORT || 5000
 
+app.get('/', (req, res) => {
+   return res.send({
+      hello: 'Welcome to streamflow api',
+      message: 'Please use postman for interacting with the api.',
+      postmanCollection: "https://github.com/abhi2425/streamflow-blog-api/blob/master/stream_flow_blog_api.postman_collection.json"
+   });
+})
+
 app.listen(port, () => {
    console.log('Server is up at ', port)
 })
