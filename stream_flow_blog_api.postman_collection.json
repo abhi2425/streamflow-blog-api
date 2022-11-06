@@ -1,0 +1,670 @@
+{
+	"info": {
+		"_postman_id": "dc5a5ab5-0898-42f2-baaf-6957b9cb3891",
+		"name": "Stream Flow Blog Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "signup user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(pm.response.code===201){\r",
+									"    pm.environment.set('authToken',pm.response.json().token)\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"age\" : 23,\r\n    \"interests\" : [  \r\n        \"chess\", \r\n        \"technology\",\r\n        \"music\",\r\n        \"sports\"\r\n    ],\r\n    \"socialMedia\" : [ \r\n      \"whatsapp\",\r\n      \"facebook\"\r\n    ],\r\n    \"name\" : \"dimitri marko\",\r\n    \"userName\" : \"dimitri@123\",\r\n    \"buildType\" : \"human\",\r\n    \"status\" : \"angry!! well all the time.\",\r\n    \"gender\":\"male\",\r\n    \"quotes\" : \"russians are known for their brother hood.\",\r\n    \"email\" : \"abhi.mount.26@protonmail.com\",\r\n    \"password\" : \"Dimitri@123\",\r\n    \"eduQualification\" : {\r\n        \"institution\" : \"College\",\r\n        \"name\" : \"USIC moscow\",\r\n        \"subject\" : \"Major in Genetics\",\r\n        \"completed\" : false,\r\n        \"yearOfCompletion\" : 2022,\r\n        \"score\" : \"4.2 gpa\"\r\n    },\r\n    \"address\" : {\r\n        \"country\" : \"Russia\",\r\n        \"city\" : \"warling city,moscow\",\r\n        \"pinCode\" : 957554\r\n    }\r\n  \r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/signup",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(pm.response.code===200){\r",
+									"    pm.environment.set('authToken',pm.response.json().token)\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"abhi.mount.26@protonmail.com\",\r\n    \"password\":\"Dimitri@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout user  (auth)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/profile/user/logout",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout All  (auth)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/profile/user/logoutAll",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"user",
+								"logoutAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload profile pic  (auth)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/D:/Groot.PNG"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/profile/me/avatar",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"me",
+								"avatar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user  (auth)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\":\"samuel miranda\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/profile/user/me",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "follow or unfollow users  (auth)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/profile/user/cody@123/followOrUnfollow",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"user",
+								"cody@123",
+								"followOrUnfollow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove unwanted follower",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/profile/user/remove/dimitri@123",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"user",
+								"remove",
+								"dimitri@123"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get followeing list of a user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/dimitri@123/following",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"dimitri@123",
+								"following"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get any field of user -->followers list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/abhi2425/followers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"abhi2425",
+								"followers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get singleUser",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "name",
+								"type": "text",
+								"value": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\":\"Abhinav Jha\",\r\n    \"Email\":\"abhi.mount.26@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/cody@123",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"cody@123"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find all Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user (auth)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/profile/user/me",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete any image ---->also profile (auth)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/profile/me/delete/cody@123",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"me",
+								"delete",
+								"cody@123"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Posts",
+			"item": [
+				{
+					"name": "create post  (auth)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"genets\",\r\n    \"body\":\"future of human existence\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/profile/post/create",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"post",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload images in a particular post (auth)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "blogImages",
+									"type": "file",
+									"src": "/D:/Abhinav.PNG"
+								},
+								{
+									"key": "blogImages",
+									"type": "file",
+									"src": "/D:/Groot.PNG"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/profile/post/upload/singing",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"post",
+								"upload",
+								"singing"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update Post  (auth)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/profile/post/update/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"post",
+								"update",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add comment to a post of any user by logged in user (auth)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"description\":\"that's good\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/profile/post/cody@123/singing/comment",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"post",
+								"cody@123",
+								"singing",
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/posts",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all post of one user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cody@123/posts",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cody@123",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get particular post of one user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cody@123/post/singing",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cody@123",
+								"post",
+								"singing"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get post titles of one user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cody@123/posts/titles",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cody@123",
+								"posts",
+								"titles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all titles of all post of every user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/posts/allTitles",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"posts",
+								"allTitles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get comments on a post of a user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/murari112000/post/what it's like in sea/comments",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"murari112000",
+								"post",
+								"what it's like in sea",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete particular post of a user (auth)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/profile/post/delete/singing",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"post",
+								"delete",
+								"singing"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete all posts of a user (auth)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/profile/posts/deleteAll",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"profile",
+								"posts",
+								"deleteAll"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{authToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
