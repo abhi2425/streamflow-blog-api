@@ -1,5 +1,3 @@
-//This middleware is so powerful that it outshines the existence of other middlewares
-
 require('dotenv').config()
 const UserCollection = require('../models/usersCollection')
 const jwt = require('jsonwebtoken')
