@@ -1,0 +1,40 @@
+version: '3.9'
+name: streamflow-backend
+services:
+  backend:
+    build: .
+    image: abhi2425/streamflow-server:init
+    ports:
+      - 5000:5000
+    networks:
+      - backend
+    depends_on:
+      - mongodb    
+
+  mongodb:
+    image: mongo:4.2.0
+    ports:
+      - 27017
+    networks:
+      - backend  
+    volumes:
+      - mongo-data:/data/db  
+
+    env_file: .env
+    environment:
+      MONGODB_URL: ${MONGODB_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      CLOUDINARY_URL: ${CLOUDINARY_URL}
+      USER_MAIL: ${USER_MAIL}
+      PASS: ${PASS}
+      EMAIL: ${EMAIL}
+      SERVICE: ${SERVICE}  
+
+
+networks:
+  backend: 
+    name: backend
+    driver: bridge
+
+volumes:
+  mongo-data:  
